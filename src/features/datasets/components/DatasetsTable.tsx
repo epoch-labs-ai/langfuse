@@ -14,7 +14,7 @@ import { api } from "@/src/utils/api";
 import { cn } from "@/src/utils/tailwind";
 import { type RouterOutput } from "@/src/utils/types";
 import { DatasetStatus } from "@prisma/client";
-import { Archive, MoreVertical } from "lucide-react";
+import { Archive, ScatterChart, MoreVertical } from "lucide-react";
 
 type RowData = {
   key: {
@@ -103,6 +103,14 @@ export function DatasetsTable(props: { projectId: string }) {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem
+                onClick={() =>
+                  alert('Evaluate FTW!')
+                }
+              >
+                <ScatterChart className="mr-2 h-4 w-4" />
+                Run Evaluation
+              </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() =>
                   mutArchive.mutate({

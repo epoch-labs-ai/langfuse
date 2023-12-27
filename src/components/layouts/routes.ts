@@ -64,6 +64,11 @@ export const ROUTES: Array<{
     pathname: `/project/[projectId]/datasets`,
     icon: Database,
   },
+  // {
+  //   name: "Evaluations",
+  //   pathname: `/project/[projectId]/evaluations`,
+  //   icon: Activity,
+  // },
   {
     name: "Settings",
     pathname: "/project/[projectId]/settings",

@@ -13,7 +13,7 @@ export const LangfuseIcon = ({
     src="/icon256.png"
     width={size}
     height={size}
-    alt="Langfuse Icon"
+    alt="Epoch Labs"
     className={className}
   />
 );
@@ -35,7 +35,7 @@ export const LangfuseLogo = ({
         size === "sm" ? "ml-2 text-sm" : "ml-3 text-xl",
       )}
     >
-      Langfuse
+      Epoch Labs
     </span>
     {version && (
       <a
