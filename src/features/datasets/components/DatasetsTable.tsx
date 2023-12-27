@@ -130,6 +130,14 @@ export function DatasetsTable(props: { projectId: string }) {
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() =>
+                  alert('Evaluate FTW!')
+                }
+              >
+                <ScatterChart className="mr-2 h-4 w-4" />
+                Run Evaluation
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() =>
                   mutArchive.mutate({
                     projectId: props.projectId,
                     datasetId: key.id,
