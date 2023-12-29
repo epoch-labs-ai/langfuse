@@ -15,6 +15,8 @@ import { cn } from "@/src/utils/tailwind";
 import { type RouterOutput } from "@/src/utils/types";
 import { DatasetStatus } from "@prisma/client";
 import { Archive, ScatterChart, MoreVertical } from "lucide-react";
+import { useState } from "react";
+import * as Dialog from "@radix-ui/react-dialog";
 
 type RowData = {
   key: {
@@ -36,6 +38,7 @@ export function DatasetsTable(props: { projectId: string }) {
   const mutArchive = api.datasets.updateDataset.useMutation({
     onSuccess: () => utils.datasets.invalidate(),
   });
+  const [openDialogId, setOpenDialogId] = useState<string | null>(null);
 
   const columns: LangfuseColumnDef<RowData>[] = [
     {
@@ -103,11 +106,7 @@ export function DatasetsTable(props: { projectId: string }) {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem
-                onClick={() =>
-                  alert('Evaluate FTW!')
-                }
-              >
+              <DropdownMenuItem onClick={() => setOpenDialogId(key.id)}>
                 <ScatterChart className="mr-2 h-4 w-4" />
                 Run Evaluation
               </DropdownMenuItem>
@@ -167,6 +166,24 @@ export function DatasetsTable(props: { projectId: string }) {
         }
       />
       <NewDatasetButton projectId={props.projectId} className="mt-4" />
+      <Dialog.Root
+        open={openDialogId !== null}
+        onOpenChange={() => setOpenDialogId(null)}
+      >
+        <Dialog.Trigger asChild>
+          {/* Empty Trigger, as we're controlling the dialog programmatically */}
+        </Dialog.Trigger>
+        <Dialog.Portal>
+          <Dialog.Overlay className="fixed inset-0 bg-black/80" />
+          <Dialog.Content className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-md bg-white p-8 text-gray-900 shadow">
+            <Dialog.Title className="mb-5">Run Evaluation</Dialog.Title>
+            <div>Evaluation config WIP</div>
+            <Dialog.Close asChild>
+              <Button>Close</Button>
+            </Dialog.Close>
+          </Dialog.Content>
+        </Dialog.Portal>
+      </Dialog.Root>
     </div>
   );
 }
