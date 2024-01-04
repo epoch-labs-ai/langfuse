@@ -60,6 +60,7 @@ export const NewEvalRunDialog = (props: {
     try {
       // Prepare the data for the POST request
       const postData = {
+        eval_name: form.getValues("name"),
         dataset_id: form.getValues("dataset"),
         project_id: props.projectId,
         models: form.getValues("evalModels"),
