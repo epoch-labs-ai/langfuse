@@ -24,8 +24,7 @@ const formSchema = z.object({
 
 // API Response from /evals/start
 interface ApiResponse {
-  success: boolean;
-  message: string;
+  eval_id: string;
 }
 
 export const NewEvalRunDialog = (props: {
