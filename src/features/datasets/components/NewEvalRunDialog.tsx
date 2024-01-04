@@ -123,7 +123,7 @@ export const NewEvalRunDialog = (props: {
                     <FormItem>
                       <FormLabel>Dataset ID</FormLabel>
                       <FormControl>
-                        <Input {...field} readOnly />
+                        <Input {...field} />
                       </FormControl>
                     </FormItem>
                   )}
