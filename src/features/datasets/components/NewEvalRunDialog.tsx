@@ -100,13 +100,14 @@ export const NewEvalRunDialog = (props: {
                   name="evalModels"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Evaluation Type</FormLabel>
+                      <FormLabel>Model</FormLabel>
                       <FormControl>
                         <div>
                           {evalModels.map((type) => (
                             <label key={type.value} className="block">
                               <input
                                 type="radio"
+                                className="mr-2"
                                 {...field}
                                 value={type.value}
                                 checked={field.value === type.value}
@@ -119,7 +120,7 @@ export const NewEvalRunDialog = (props: {
                     </FormItem>
                   )}
                 />
-                <div className="flex justify-end space-x-2">
+                <div className="flex justify-end space-x-4">
                   <Button type="submit" className="primary">
                     Submit
                   </Button>
