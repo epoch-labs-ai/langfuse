@@ -10,11 +10,8 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
 } from "@/src/components/ui/form";
 import { Input } from "@/src/components/ui/input";
-import { Checkbox } from "@/src/components/ui/checkbox";
-import { Label } from "@/src/components/ui/label";
 
 const formSchema = z.object({
   name: z.string(),
