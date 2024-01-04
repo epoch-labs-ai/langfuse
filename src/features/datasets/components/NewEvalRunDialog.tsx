@@ -56,14 +56,13 @@ export const NewEvalRunDialog = (props: {
   }, [props.datasetId, form]);
 
   async function onSubmit() {
-    console.log(form.getValues());
     try {
       // Prepare the data for the POST request
       const postData = {
         eval_name: form.getValues("name"),
         dataset_id: form.getValues("dataset"),
         project_id: props.projectId,
-        models: form.getValues("evalModels"),
+        models: [form.getValues("evalModels")],
       };
 
       // Make the POST request
