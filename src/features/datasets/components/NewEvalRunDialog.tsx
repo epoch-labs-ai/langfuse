@@ -1,7 +1,7 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import { Button } from "@/src/components/ui/button";
 import * as z from "zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import {
@@ -21,6 +21,12 @@ const formSchema = z.object({
   dataset: z.string(),
   evalModels: z.enum(["gpt-3.5-turbo-1106", "gpt-4-1106-preview", "gpt-4"]),
 });
+
+// API Response from /evals/start
+interface ApiResponse {
+  success: boolean;
+  message: string;
+}
 
 export const NewEvalRunDialog = (props: {
   projectId: string;
@@ -46,9 +52,44 @@ export const NewEvalRunDialog = (props: {
       evalModels: "gpt-3.5-turbo-1106",
     },
   });
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    alert("Submitted MF!");
-    console.log(values);
+
+  useEffect(() => {
+    if (props.datasetId) {
+      form.setValue("dataset", props.datasetId);
+    }
+  }, [props.datasetId, form]);
+
+  async function onSubmit() {
+    console.log(form.getValues());
+    try {
+      // Prepare the data for the POST request
+      const postData = {
+        dataset_id: form.getValues("dataset"),
+        project_id: props.projectId,
+        models: form.getValues("evalModels"),
+      };
+
+      // Make the POST request
+      const response = await fetch("/evals/start", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(postData),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = (await response.json()) as ApiResponse;
+      console.log(result);
+      // Handle success - update state, show notification, etc.
+      props.onOpenChange(false);
+    } catch (error) {
+      console.error("Submission error:", error);
+      setFormError("Failed to submit data");
+    }
   }
 
   return (
@@ -82,18 +123,14 @@ export const NewEvalRunDialog = (props: {
                 <FormField
                   control={form.control}
                   name="dataset"
-                  render={({ field }) => {
-                    console.log(field);
-                    console.log(props.datasetId);
-                    return (
-                      <FormItem>
-                        <FormLabel>Dataset ID</FormLabel>
-                        <FormControl>
-                          <Input {...field} value={props.datasetId} readOnly />
-                        </FormControl>
-                      </FormItem>
-                    );
-                  }}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Dataset ID</FormLabel>
+                      <FormControl>
+                        <Input {...field} readOnly />
+                      </FormControl>
+                    </FormItem>
+                  )}
                 />
                 <FormField
                   control={form.control}
