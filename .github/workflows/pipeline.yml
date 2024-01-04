@@ -121,8 +121,8 @@ jobs:
       NEXTAUTH_SECRET: "secret"
       SALT: "salt"
       NEXTAUTH_URL: "http://localhost:3030"
-      REGISTRY: ghcr.io
-      IMAGE_NAME: ${{ github.repository }}
+      REGISTRY: 596460412103.dkr.ecr.us-east-1.amazonaws.com
+      IMAGE_NAME: langfuse
     permissions:
       packages: write
       contents: read
