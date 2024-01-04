@@ -44,8 +44,12 @@ export function DatasetsTable(props: { projectId: string }) {
   const [selectedDatasetId, setSelectedDatasetId] = useState<
     string | undefined
   >(undefined);
-  const openEvalDialog = (datasetId: string) => {
+  const [selectedDatasetName, setSelectedDatasetName] = useState<
+    string | undefined
+  >(undefined);
+  const openEvalDialog = (datasetId: string, datasetName: string) => {
     setSelectedDatasetId(datasetId);
+    setSelectedDatasetName(datasetName);
     setIsEvalDialogOpen(true);
   };
   const closeEvalDialog = () => {
@@ -118,7 +122,9 @@ export function DatasetsTable(props: { projectId: string }) {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem onClick={() => openEvalDialog(key.id)}>
+              <DropdownMenuItem
+                onClick={() => openEvalDialog(key.id, key.name)}
+              >
                 <ScatterChart className="mr-2 h-4 w-4" />
                 Run Evaluation
               </DropdownMenuItem>
@@ -181,6 +187,7 @@ export function DatasetsTable(props: { projectId: string }) {
       <NewEvalRunDialog
         projectId={props.projectId}
         datasetId={selectedDatasetId}
+        datasetName={selectedDatasetName}
         open={isEvalDialogOpen}
         onOpenChange={closeEvalDialog}
       />

@@ -15,7 +15,8 @@ import { Input } from "@/src/components/ui/input";
 
 const formSchema = z.object({
   name: z.string(),
-  dataset: z.string(),
+  datasetId: z.string(),
+  datasetName: z.string(),
   evalModels: z.enum(["gpt-3.5-turbo-1106", "gpt-4-1106-preview", "gpt-4"]),
 });
 
@@ -27,6 +28,7 @@ interface ApiResponse {
 export const NewEvalRunDialog = (props: {
   projectId: string;
   datasetId?: string;
+  datasetName?: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onFormSuccess?: () => void;
@@ -44,23 +46,28 @@ export const NewEvalRunDialog = (props: {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      dataset: "",
+      datasetName: "",
+      datasetId: "",
       evalModels: "gpt-3.5-turbo-1106",
     },
   });
 
   useEffect(() => {
     if (props.datasetId) {
-      form.setValue("dataset", props.datasetId);
+      form.setValue("datasetId", props.datasetId);
     }
-  }, [props.datasetId, form]);
+    if (props.datasetName) {
+      form.setValue("datasetName", props.datasetName);
+    }
+  }, [props.datasetId, props.datasetName, form]);
 
   async function onSubmit() {
     try {
       // Prepare the data for the POST request
       const postData = {
         eval_name: form.getValues("name"),
-        dataset_id: form.getValues("dataset"),
+        dataset_id: form.getValues("datasetId"),
+        dataset_name: form.getValues("datasetName"),
         project_id: props.projectId,
         models: [form.getValues("evalModels")],
       };
@@ -118,12 +125,24 @@ export const NewEvalRunDialog = (props: {
                 />
                 <FormField
                   control={form.control}
-                  name="dataset"
+                  name="datasetId"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Dataset ID</FormLabel>
+                      <FormLabel>Dataset Id</FormLabel>
                       <FormControl>
-                        <Input {...field} />
+                        <Input {...field} readOnly />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="datasetName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Dataset Name</FormLabel>
+                      <FormControl>
+                        <Input {...field} readOnly />
                       </FormControl>
                     </FormItem>
                   )}
