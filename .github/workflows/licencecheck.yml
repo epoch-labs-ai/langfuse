@@ -19,6 +19,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v2
         with:
+          architecture: arm64
           node-version: 18
 
       - name: Install license-checker
