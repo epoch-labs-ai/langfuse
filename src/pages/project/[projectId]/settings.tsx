@@ -2,7 +2,8 @@ import { ChevronRightIcon } from "@heroicons/react/20/solid";
 import { CommandLineIcon, RocketLaunchIcon } from "@heroicons/react/24/outline";
 import { SiPython } from "react-icons/si";
 import Header from "@/src/components/layouts/header";
-import { ApiKeyList } from "@/src/features/public-api/components/ApiKeyList";
+// import { ApiKeyList } from "@/src/features/public-api/components/ApiKeyList";
+import { VendorKeysList } from "@/src/features/vendor-api/components/VendorKeysList";
 import { useRouter } from "next/router";
 import { Code, Bird, GraduationCap } from "lucide-react";
 import { ProjectMembersTable } from "@/src/features/rbac/components/ProjectMembersTable";
@@ -22,7 +23,8 @@ export default function SettingsPage() {
         <ProjectMembersTable projectId={projectId} />
         <RenameProject projectId={projectId} />
         <HostNameProject />
-        <ApiKeyList projectId={projectId} />
+        {/* <ApiKeyList projectId={projectId} /> */}
+        <VendorKeysList projectId={projectId} />
         <ProjectUsageChart projectId={projectId} />
         <Instructions />
         <div className="space-y-3">
