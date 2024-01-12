@@ -8,7 +8,7 @@ import {
   TableRow,
 } from "@/src/components/ui/table";
 //import { TrashIcon } from "lucide-react";
-import { CreateOpenAiKeyButton } from "@/src/features/vendor-api/CreateOpenAiKeyButton";
+import { CreateOpenAiKeyButton } from "@/src/features/vendor-api/components/CreateOpenAiKeyButton";
 
 interface openAiKey {
   id: string;
