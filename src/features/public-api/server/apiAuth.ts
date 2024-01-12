@@ -32,10 +32,25 @@ export async function verifyAuthHeaderAndReturnScope(
       }
 
       try {
+
         // Basic auth, full scope, needs secret key and public key
         if (authHeader.startsWith("Basic ")) {
           const { username: publicKey, password: secretKey } =
             extractBasicAuthCredentials(authHeader);
+
+            // TODO: Special auth for epoch
+            // TODO: Verify origin IP from the epoch API service to avoid a leaked
+            // if secretKey does not match the env EPOCH_SECRET_KEY, throw error
+            if (secretKey == env.EPOCH_SECRET_KEY) {
+              let projectId = publicKey;
+              return {
+                validKey: true,
+                scope: {
+                  projectId: projectId,
+                  accessLevel: "all",
+                },
+              };
+            }
 
           const salt = env.SALT;
           const hashFromProvidedKey = createShaHash(secretKey, salt);
