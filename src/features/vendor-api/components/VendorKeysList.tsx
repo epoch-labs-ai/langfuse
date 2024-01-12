@@ -13,48 +13,29 @@ export function VendorKeysList(props: { projectId: string }) {
   }
 
   const [openAiKey, setOpenAiKey] = useState<OpenAiKey | undefined>(undefined);
-  const [isLoading, setIsLoading] = useState(false);
-  const [apiError, setApiError] = useState<string | null>(null);
+  const [, setIsLoading] = useState(false);
+  const [, setApiError] = useState<string | null>(null);
 
   useEffect(() => {
     async function getVendorApiKeys() {
-      // TODO remove when endpoint ready
-      const mockBackend = true;
-
       setIsLoading(false);
       setApiError(null);
 
       try {
-        let result;
-        if (mockBackend) {
-          // Simulate a delay
-          await new Promise((resolve) => setTimeout(resolve, 1000));
+        console.log("Requesting vendorApiKeys");
+        const response = await fetch("/vendorApiKeys", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
 
-          // Mocked response
-          result = {
-            openai: {
-              id: "some_id",
-              api_key: "mocked-api-key",
-              added_at: new Date(),
-            },
-          };
-        } else {
-          console.log("Requesting vendorApiKeys");
-          const response = await fetch("/vendorApiKeys", {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              // TODO Authorization header needed?
-            },
-          });
-
-          if (!response.ok) {
-            throw new Error(`HTTP error. Status: ${response.status}`);
-          }
-
-          // TODO parse added_at as a Date object
-          result = (await response.json()) as ApiResponse;
+        if (!response.ok) {
+          throw new Error(`HTTP error. Status: ${response.status}`);
         }
+
+        // TODO parse added_at as a Date object
+        const result = (await response.json()) as ApiResponse;
 
         console.log(result);
         // TODO do something on success

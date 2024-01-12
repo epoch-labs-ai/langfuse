@@ -28,7 +28,7 @@ export function CreateOpenAiKeyButton(props: {
   disabled: boolean;
 }) {
   const [open, setOpen] = useState(false);
-  const [formError, setFormError] = useState<string | null>(null);
+  const [, setFormError] = useState<string | null>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

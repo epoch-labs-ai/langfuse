@@ -14,6 +14,7 @@ export const env = createEnv({
         ? z.string().min(1)
         : z.string().min(1).optional(),
     SEED_SECRET_KEY: z.string().min(1).optional(),
+    EPOCH_SECRET_KEY: z.string().min(1).optional(),
     NEXTAUTH_URL: z.preprocess(
       // This makes Vercel deployments not fail if you don't set NEXTAUTH_URL
       // Since NextAuth.js automatically uses the VERCEL_URL if present.
@@ -79,6 +80,7 @@ export const env = createEnv({
    */
   runtimeEnv: {
     SEED_SECRET_KEY: process.env.SEED_SECRET_KEY,
+    EPOCH_SECRET_KEY: process.env.EPOCH_SECRET_KEY,
     NEXT_PUBLIC_DEMO_PROJECT_ID: process.env.NEXT_PUBLIC_DEMO_PROJECT_ID,
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,

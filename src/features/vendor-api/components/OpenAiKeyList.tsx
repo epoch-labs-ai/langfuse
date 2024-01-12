@@ -7,7 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/src/components/ui/table";
-import { TrashIcon } from "lucide-react";
+//import { TrashIcon } from "lucide-react";
 import { CreateOpenAiKeyButton } from "@/src/features/vendor-api/CreateOpenAiKeyButton";
 
 interface openAiKey {
