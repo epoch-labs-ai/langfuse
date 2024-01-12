@@ -1,12 +1,12 @@
 import { Button } from "@/src/components/ui/button";
 import * as Dialog from "@radix-ui/react-dialog";
 import { PlusIcon } from "lucide-react";
-import { useSession } from "next-auth/react";
+// import { useSession } from "next-auth/react";
 import { useState } from "react";
 
-interface ApiResponse {
-  success: boolean;
-}
+// interface ApiResponse {
+//   success: boolean;
+// }
 
 export function CreateEpochApiKeyButton(props: { projectId: string }) {
   const [open, setOpen] = useState(false);
@@ -19,7 +19,7 @@ export function CreateEpochApiKeyButton(props: { projectId: string }) {
         project_id: props.projectId,
       };
 
-      const response = await fetch("/epochApiKey", {
+      const response = await fetch("/apiKeys", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -30,7 +30,7 @@ export function CreateEpochApiKeyButton(props: { projectId: string }) {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      const result = (await response.json()) as ApiResponse;
+      // const result = (await response.json()) as ApiResponse;
       setOpen(false);
     } catch (error) {
       console.log("Submission error:", error);
@@ -38,6 +38,7 @@ export function CreateEpochApiKeyButton(props: { projectId: string }) {
   }
 
   return (
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     <Dialog.Root open={open} onOpenChange={createEpochApiKey}>
       <Dialog.Trigger asChild>
         <Button variant="secondary">

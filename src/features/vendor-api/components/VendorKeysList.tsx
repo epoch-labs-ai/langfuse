@@ -23,12 +23,15 @@ export function VendorKeysList(props: { projectId: string }) {
 
       try {
         console.log("Requesting vendorApiKeys");
-        const response = await fetch("/vendorApiKeys", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
+        const response = await fetch(
+          `/vendorApiKeys?project_id=${props.projectId}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
           },
-        });
+        );
 
         if (!response.ok) {
           throw new Error(`HTTP error. Status: ${response.status}`);

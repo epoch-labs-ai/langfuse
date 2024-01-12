@@ -16,12 +16,12 @@ export function EpochApiKeyList(props: { projectId: string }) {
     api_key: string;
   }
 
-  const [epochApiKey, setEpochApiKey] = useState<EpochApiKey | null>(null);
+  const [, setEpochApiKey] = useState<EpochApiKey | null>(null);
 
   async function getEpochApiKeys() {
     try {
       console.log("Requesting Epoch API Keys");
-      const response = await fetch("/apiKeys", {
+      const response = await fetch(`/apiKeys?project_id=${props.projectId}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -39,6 +39,8 @@ export function EpochApiKeyList(props: { projectId: string }) {
       console.error("Failed to retrieve Epoch API keys", error);
     }
   }
+
+  void getEpochApiKeys();
 
   return (
     <div>
