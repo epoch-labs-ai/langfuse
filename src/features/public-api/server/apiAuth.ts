@@ -38,19 +38,22 @@ export async function verifyAuthHeaderAndReturnScope(
           const { username: publicKey, password: secretKey } =
             extractBasicAuthCredentials(authHeader);
 
-            // TODO: Special auth for epoch
-            // TODO: Verify origin IP from the epoch API service to avoid a leaked
-            // if secretKey does not match the env EPOCH_SECRET_KEY, throw error
-            if (secretKey == env.EPOCH_SECRET_KEY) {
-              const projectId = publicKey;
-              return {
-                validKey: true,
-                scope: {
-                  projectId: projectId,
-                  accessLevel: "all",
-                },
-              };
-            }
+
+          //////////////////////////////// <EPOCH FORK ONLY> ////////////////////////////////
+          // Special auth for epoch
+          // TODO: Verify origin IP from the epoch API service to avoid a leaked
+          // if secretKey does not match the env EPOCH_SECRET_KEY, throw error
+          if (secretKey == env.EPOCH_SECRET_KEY) {
+            const projectId = publicKey;
+            return {
+              validKey: true,
+              scope: {
+                projectId: projectId,
+                accessLevel: "all",
+              },
+            };
+          }
+          //////////////////////////////// </EPOCH FORK ONLY> ////////////////////////////////
 
           const salt = env.SALT;
           const hashFromProvidedKey = createShaHash(secretKey, salt);
