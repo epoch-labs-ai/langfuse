@@ -7,7 +7,7 @@ import {
 } from "@/src/components/ui/table";
 import { CreateEpochApiKeyButton } from "@/src/features/public-api/components/CreateEpochApiKeyButton";
 import { TableBody, TableCell } from "@tremor/react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export function EpochApiKeyList(props: { projectId: string }) {
   interface EpochApiKey {
@@ -16,31 +16,31 @@ export function EpochApiKeyList(props: { projectId: string }) {
 
   const [epochApiKey, setEpochApiKey] = useState<EpochApiKey | null>(null);
 
-  useEffect(() => {
-    async function getEpochApiKeys(): Promise<void> {
-      try {
-        console.log("Requesting Epoch API Keys");
-        const response = await fetch(`/apiKeys?project_id=${props.projectId}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+  const getEpochApiKeys = useCallback(async () => {
+    try {
+      console.log("Requesting Epoch API Keys");
+      const response = await fetch(`/apiKeys?project_id=${props.projectId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-        if (!response.ok) {
-          throw new Error(`HTTP error. Status ${response.status}`);
-        }
-
-        const result = (await response.json()) as EpochApiKey;
-        // Assumes only a single key for now
-        setEpochApiKey(result);
-      } catch (error) {
-        console.error("Failed to retrieve Epoch API keys", error);
+      if (!response.ok) {
+        throw new Error(`HTTP error. Status ${response.status}`);
       }
-    }
 
-    void getEpochApiKeys();
+      const result = (await response.json()) as EpochApiKey;
+      // Assumes only a single key for now
+      setEpochApiKey(result);
+    } catch (error) {
+      console.error("Failed to retrieve Epoch API keys", error);
+    }
   }, [props.projectId]);
+
+  useEffect(() => {
+    void getEpochApiKeys();
+  }, [getEpochApiKeys]);
 
   return (
     <div>
@@ -63,7 +63,10 @@ export function EpochApiKeyList(props: { projectId: string }) {
           </TableBody>
         </Table>
       </Card>
-      <CreateEpochApiKeyButton projectId={props.projectId} />
+      <CreateEpochApiKeyButton
+        projectId={props.projectId}
+        refreshKeys={getEpochApiKeys}
+      />
     </div>
   );
 }

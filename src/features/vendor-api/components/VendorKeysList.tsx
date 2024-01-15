@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { OpenAiKeyList } from "@/src/features/vendor-api/components/OpenAiKeyList";
 
 export function VendorKeysList(props: { projectId: string }) {
@@ -14,7 +14,7 @@ export function VendorKeysList(props: { projectId: string }) {
   const [, setIsLoading] = useState(false);
   const [, setApiError] = useState<string | null>(null);
 
-  async function getVendorApiKeys() {
+  const getVendorApiKeys = useCallback(async () => {
     setIsLoading(false);
     setApiError(null);
 
@@ -48,13 +48,13 @@ export function VendorKeysList(props: { projectId: string }) {
     } finally {
       setIsLoading(false);
     }
-  }
+  }, [props.projectId]);
 
   useEffect(() => {
     getVendorApiKeys().catch(() => {
       console.error("Failed initial vendor key retrieval");
     });
-  });
+  }, [getVendorApiKeys]);
 
   return (
     <div>

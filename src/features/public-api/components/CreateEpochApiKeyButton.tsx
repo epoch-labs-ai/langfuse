@@ -8,8 +8,15 @@ interface ApiResponse {
   success: boolean;
 }
 
-export function CreateEpochApiKeyButton(props: { projectId: string }) {
+export function CreateEpochApiKeyButton(props: {
+  projectId: string;
+  refreshKeys: () => Promise<void>;
+}) {
   const [open, setOpen] = useState(false);
+
+  const handleRefresh = async () => {
+    await props.refreshKeys();
+  };
 
   async function createEpochApiKey() {
     console.log("Creating API key");
@@ -33,6 +40,7 @@ export function CreateEpochApiKeyButton(props: { projectId: string }) {
       const result = (await response.json()) as ApiResponse;
       console.log("Key created", result);
       setOpen(false);
+      await handleRefresh();
     } catch (error) {
       console.log("Submission error:", error);
     }
