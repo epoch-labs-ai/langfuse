@@ -4,9 +4,7 @@ import { OpenAiKeyList } from "@/src/features/vendor-api/components/OpenAiKeyLis
 export function VendorKeysList(props: { projectId: string }) {
   // Expected API Response structure
   interface OpenAiKey {
-    id: string;
     api_key: string;
-    added_at: Date;
   }
   interface ApiResponse {
     openai?: OpenAiKey;

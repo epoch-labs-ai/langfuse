@@ -11,9 +11,7 @@ import {
 import { CreateOpenAiKeyButton } from "@/src/features/vendor-api/components/CreateOpenAiKeyButton";
 
 interface openAiKey {
-  id: string;
   api_key: string;
-  added_at: Date;
 }
 
 export function OpenAiKeyList(props: {

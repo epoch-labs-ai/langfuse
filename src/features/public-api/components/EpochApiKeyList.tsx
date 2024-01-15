@@ -11,8 +11,6 @@ import { useEffect, useState } from "react";
 
 export function EpochApiKeyList(props: { projectId: string }) {
   interface EpochApiKey {
-    id: string;
-    created: Date;
     api_key: string;
   }
 
