@@ -1,7 +1,13 @@
 import { useState, useEffect, useCallback } from "react";
 import { OpenAiKeyList } from "@/src/features/vendor-api/components/OpenAiKeyList";
+import { useHasAccess } from "@/src/features/rbac/utils/checkAccess";
 
 export function VendorKeysList(props: { projectId: string }) {
+  const hasAccess = useHasAccess({
+    projectId: props.projectId,
+    scope: "apiKeys:read",
+  });
+
   // Expected API Response structure
   interface OpenAiKey {
     api_key: string;
@@ -51,10 +57,14 @@ export function VendorKeysList(props: { projectId: string }) {
   }, [props.projectId]);
 
   useEffect(() => {
-    getVendorApiKeys().catch(() => {
-      console.error("Failed initial vendor key retrieval");
-    });
-  }, [getVendorApiKeys]);
+    if (hasAccess) {
+      getVendorApiKeys().catch(() => {
+        console.error("Failed initial vendor key retrieval");
+      });
+    }
+  }, [getVendorApiKeys, hasAccess]);
+
+  if (!hasAccess) return null;
 
   return (
     <div>

@@ -6,10 +6,16 @@ import {
   TableHead,
 } from "@/src/components/ui/table";
 import { CreateEpochApiKeyButton } from "@/src/features/public-api/components/CreateEpochApiKeyButton";
+import { useHasAccess } from "@/src/features/rbac/utils/checkAccess";
 import { TableBody, TableCell } from "@tremor/react";
 import { useCallback, useEffect, useState } from "react";
 
 export function EpochApiKeyList(props: { projectId: string }) {
+  const hasAccess = useHasAccess({
+    projectId: props.projectId,
+    scope: "apiKeys:read",
+  });
+
   interface EpochApiKey {
     api_key: string;
   }
@@ -39,8 +45,12 @@ export function EpochApiKeyList(props: { projectId: string }) {
   }, [props.projectId]);
 
   useEffect(() => {
-    void getEpochApiKeys();
-  }, [getEpochApiKeys]);
+    if (hasAccess) {
+      void getEpochApiKeys();
+    }
+  }, [getEpochApiKeys, hasAccess]);
+
+  if (!hasAccess) return null;
 
   return (
     <div>
