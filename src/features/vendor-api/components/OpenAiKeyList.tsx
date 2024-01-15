@@ -27,21 +27,12 @@ export function OpenAiKeyList(props: {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="hidden text-gray-900 md:table-cell">
-                Added
-              </TableHead>
               <TableHead className="text-gray-900 md:table-cell">Key</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody className="text-gray-500">
             {props.openAiKey ? (
-              <TableRow
-                key={props.openAiKey.id}
-                className="hover:bg-transparent"
-              >
-                <TableCell className="hidden md:table-cell">
-                  {props.openAiKey.added_at.toLocaleDateString()}
-                </TableCell>
+              <TableRow key="random" className="hover:bg-transparent">
                 <TableCell>{props.openAiKey.api_key}</TableCell>
               </TableRow>
             ) : null}

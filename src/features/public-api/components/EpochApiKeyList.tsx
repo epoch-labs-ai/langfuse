@@ -51,18 +51,12 @@ export function EpochApiKeyList(props: { projectId: string }) {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="hidden text-gray-900 md:table-cell">
-                Created
-              </TableHead>
               <TableHead className="text-gray-900">Key</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody className="text-gray-500">
             {epochApiKey ? (
-              <TableRow key={epochApiKey.id} className="hover:bg-transparent">
-                <TableCell className="hidden md:table-cell">
-                  {epochApiKey.created.toLocaleDateString()}
-                </TableCell>
+              <TableRow key="random" className="hover:bg-transparent">
                 <TableCell>{epochApiKey.api_key}</TableCell>
               </TableRow>
             ) : null}
