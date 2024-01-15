@@ -14,54 +14,58 @@ export function VendorKeysList(props: { projectId: string }) {
   const [, setIsLoading] = useState(false);
   const [, setApiError] = useState<string | null>(null);
 
-  useEffect(() => {
-    async function getVendorApiKeys() {
-      setIsLoading(false);
-      setApiError(null);
+  async function getVendorApiKeys() {
+    setIsLoading(false);
+    setApiError(null);
 
-      try {
-        console.log("Requesting vendorApiKeys");
-        const response = await fetch(
-          `/vendorApiKeys?project_id=${props.projectId}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
+    try {
+      console.log("Requesting vendorApiKeys");
+      const response = await fetch(
+        `/vendorApiKeys?project_id=${props.projectId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
           },
-        );
+        },
+      );
 
-        if (!response.ok) {
-          throw new Error(`HTTP error. Status: ${response.status}`);
-        }
-
-        // TODO parse added_at as a Date object
-        const result = (await response.json()) as ApiResponse;
-
-        console.log(result);
-        // TODO do something on success
-        // TODO handle case of no key
-        setOpenAiKey(result.openai);
-      } catch (error) {
-        console.error("Failed to retrieve vendor keys", error);
-        setApiError("Failed to get vendor API keys");
-        // TODO do something if needed in the error case
-      } finally {
-        setIsLoading(false);
+      if (!response.ok) {
+        throw new Error(`HTTP error. Status: ${response.status}`);
       }
+
+      // TODO parse added_at as a Date object
+      const result = (await response.json()) as ApiResponse;
+
+      console.log(result);
+      // TODO do something on success
+      // TODO handle case of no key
+      setOpenAiKey(result.openai);
+    } catch (error) {
+      console.error("Failed to retrieve vendor keys", error);
+      setApiError("Failed to get vendor API keys");
+      // TODO do something if needed in the error case
+    } finally {
+      setIsLoading(false);
     }
+  }
 
-    void getVendorApiKeys();
-  }, [props.projectId]);
-
-  // const vendorApiKeys = getVendorApiKeys();
+  useEffect(() => {
+    getVendorApiKeys().catch(() => {
+      console.error("Failed initial vendor key retrieval");
+    });
+  });
 
   return (
     <div>
       <h2 className="mb-5 text-base font-semibold leading-6 text-gray-900">
         Vendor API Keys
       </h2>
-      <OpenAiKeyList projectId={props.projectId} openAiKey={openAiKey} />
+      <OpenAiKeyList
+        projectId={props.projectId}
+        openAiKey={openAiKey}
+        refreshKeys={getVendorApiKeys}
+      />
     </div>
   );
 }

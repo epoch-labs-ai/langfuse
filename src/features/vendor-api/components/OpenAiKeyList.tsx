@@ -17,7 +17,12 @@ interface openAiKey {
 export function OpenAiKeyList(props: {
   projectId: string;
   openAiKey?: openAiKey;
+  refreshKeys: () => Promise<void>;
 }) {
+  const handleRefresh = async () => {
+    await props.refreshKeys();
+  };
+
   return (
     <div className="ml-5">
       <h3 className="mb-5 text-base font-medium leading-6 text-gray-900">
@@ -42,6 +47,7 @@ export function OpenAiKeyList(props: {
       <CreateOpenAiKeyButton
         projectId={props.projectId}
         disabled={!!props.openAiKey}
+        refreshKeys={handleRefresh}
       />
     </div>
   );

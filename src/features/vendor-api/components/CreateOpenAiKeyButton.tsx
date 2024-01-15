@@ -26,6 +26,7 @@ const formSchema = z.object({
 export function CreateOpenAiKeyButton(props: {
   projectId: string;
   disabled: boolean;
+  refreshKeys: () => Promise<void>;
 }) {
   const [open, setOpen] = useState(false);
   const [, setFormError] = useState<string | null>(null);
@@ -36,6 +37,10 @@ export function CreateOpenAiKeyButton(props: {
       apiKey: "",
     },
   });
+
+  const handleRefresh = async () => {
+    await props.refreshKeys();
+  };
 
   async function onSubmit() {
     console.log("onSubmit triggered");
@@ -62,6 +67,7 @@ export function CreateOpenAiKeyButton(props: {
       console.log(result);
       // Propagate the change out to the parent component or prompt to run the api key retrieval
       setOpen(false);
+      await handleRefresh();
     } catch (error) {
       console.error("Submission error:", error);
       setFormError("Failed to save key");
