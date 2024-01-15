@@ -7,7 +7,6 @@ import {
 } from "@/src/components/ui/table";
 import { CreateEpochApiKeyButton } from "@/src/features/public-api/components/CreateEpochApiKeyButton";
 import { TableBody, TableCell } from "@tremor/react";
-import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 
 export function EpochApiKeyList(props: { projectId: string }) {
