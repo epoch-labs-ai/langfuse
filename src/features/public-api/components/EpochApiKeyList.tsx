@@ -6,41 +6,44 @@ import {
   TableHead,
 } from "@/src/components/ui/table";
 import { CreateEpochApiKeyButton } from "@/src/features/public-api/components/CreateEpochApiKeyButton";
-import { TableBody } from "@tremor/react";
+import { TableBody, TableCell } from "@tremor/react";
 import { useSession } from "next-auth/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export function EpochApiKeyList(props: { projectId: string }) {
   interface EpochApiKey {
+    id: string;
     created: Date;
     api_key: string;
   }
 
-  const [, setEpochApiKey] = useState<EpochApiKey | null>(null);
+  const [epochApiKey, setEpochApiKey] = useState<EpochApiKey | null>(null);
 
-  async function getEpochApiKeys() {
-    try {
-      console.log("Requesting Epoch API Keys");
-      const response = await fetch(`/apiKeys?project_id=${props.projectId}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          // TODO auth header
-        },
-      });
+  useEffect(() => {
+    async function getEpochApiKeys(): Promise<void> {
+      try {
+        console.log("Requesting Epoch API Keys");
+        const response = await fetch(`/apiKeys?project_id=${props.projectId}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error. Status ${response.status}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error. Status ${response.status}`);
+        }
+
+        const result = (await response.json()) as EpochApiKey;
+        // Assumes only a single key for now
+        setEpochApiKey(result);
+      } catch (error) {
+        console.error("Failed to retrieve Epoch API keys", error);
       }
-
-      const result = (await response.json()) as EpochApiKey;
-      setEpochApiKey(result);
-    } catch (error) {
-      console.error("Failed to retrieve Epoch API keys", error);
     }
-  }
 
-  void getEpochApiKeys();
+    void getEpochApiKeys();
+  }, [props.projectId]);
 
   return (
     <div>
@@ -58,11 +61,17 @@ export function EpochApiKeyList(props: { projectId: string }) {
             </TableRow>
           </TableHeader>
           <TableBody className="text-gray-500">
-            <TableRow></TableRow>
+            {epochApiKey ? (
+              <TableRow key={epochApiKey.id} className="hover:bg-transparent">
+                <TableCell className="hidden md:table-cell">
+                  {epochApiKey.created.toLocaleDateString()}
+                </TableCell>
+                <TableCell>{epochApiKey.api_key}</TableCell>
+              </TableRow>
+            ) : null}
           </TableBody>
         </Table>
       </Card>
-      <div>{JSON.stringify(useSession())}</div>
       <CreateEpochApiKeyButton projectId={props.projectId} />
     </div>
   );

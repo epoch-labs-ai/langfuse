@@ -4,15 +4,15 @@ import { PlusIcon } from "lucide-react";
 // import { useSession } from "next-auth/react";
 import { useState } from "react";
 
-// interface ApiResponse {
-//   success: boolean;
-// }
+interface ApiResponse {
+  success: boolean;
+}
 
 export function CreateEpochApiKeyButton(props: { projectId: string }) {
   const [open, setOpen] = useState(false);
 
   async function createEpochApiKey() {
-    console.log("onSubmit triggered");
+    console.log("Creating API key");
 
     try {
       const postData = {
@@ -30,7 +30,8 @@ export function CreateEpochApiKeyButton(props: { projectId: string }) {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      // const result = (await response.json()) as ApiResponse;
+      const result = (await response.json()) as ApiResponse;
+      console.log("Key created", result);
       setOpen(false);
     } catch (error) {
       console.log("Submission error:", error);

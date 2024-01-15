@@ -45,7 +45,8 @@ export function ApiKeyList(props: { projectId: string }) {
   return (
     <div>
       <h2 className="mb-5 text-base font-semibold leading-6 text-gray-900">
-        API keys
+        {/* TODO Hide */}
+        (TODO: Hide) API keys
       </h2>
       <Card className="mb-4">
         <Table>
