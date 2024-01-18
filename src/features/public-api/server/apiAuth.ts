@@ -33,6 +33,8 @@ export async function verifyAuthHeaderAndReturnScope(
 
       try {
 
+        console.log("DEBUG authHeader", authHeader)
+
         // Basic auth, full scope, needs secret key and public key
         if (authHeader.startsWith("Basic ")) {
           const { username: publicKey, password: secretKey } =
@@ -43,7 +45,9 @@ export async function verifyAuthHeaderAndReturnScope(
           // Special auth for epoch
           // TODO: Verify origin IP from the epoch API service to avoid a leaked
           // if secretKey does not match the env EPOCH_SECRET_KEY, throw error
+            console.log("DEBUG secretKey", secretKey)
           if (secretKey == env.EPOCH_SECRET_KEY) {
+            console.log("DEBUG INHERE")
             const projectId = publicKey;
             return {
               validKey: true,
