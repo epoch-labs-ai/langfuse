@@ -34,33 +34,17 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
+
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v4
-        with:
-          images: |
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          tags: |
-            type=ref,event=branch
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
+
       - name: Build and push Docker image
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=registry,ref=${{ steps.meta.outputs.tags }}
-          cache-to: type=inline
-          build-args: |
-            DATABASE_URL=${{ env.DATABASE_URL }}
-            NEXTAUTH_SECRET=${{ env.NEXTAUTH_SECRET }}
-            NEXTAUTH_URL=${{ env.NEXTAUTH_URL }}
-            SALT=${{ env.SALT }}
+        id: build-push
+        run: |
+          docker-compose -f docker-compose.build.yml build
+          docker tag langfuse-langfuse-server 596460412103.dkr.ecr.us-east-1.amazonaws.com/langfuse:main
+          docker push 596460412103.dkr.ecr.us-east-1.amazonaws.com/langfuse:main
       - name: Remove untagged images from ECR
         run: |
           # Check if AWS CLI is correctly installed and configured
@@ -77,4 +61,3 @@ jobs:
             echo "Deleting image with digest $digest..."
             aws ecr batch-delete-image --repository-name $IMAGE_NAME --image-ids imageDigest=$digest
           done
-
